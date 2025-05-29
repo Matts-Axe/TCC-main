@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil do Usuário</title>
+    <style>
+        :root {
+            --primary-color: #11224D;
+            --secondary-color: #243E73;
+            --accent-color: #004E98;
+            --highlight-color: #0096FF;
+            --text-color: #7D878F;
+            --background-light: #C0C0C0;
+            --button-primary: #FF6700;
+            --button-hover: #FFA500;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f4f8;
+            color: var(--primary-color);
+        }
+
+        .profile-container {
+            max-width: 1000px;
+            margin: 20px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid var(--background-light);
+        }
+
+        .profile-photo {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 40px;
+            border: 4px solid var(--highlight-color);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .profile-photo:hover {
+            transform: scale(1.05);
+        }
+
+        .upload-photo {
+            position: relative;
+            display: inline-block;
+        }
+
+        #photoInput {
+            display: none;
+        }
+
+        .profile-info h2 {
+            margin: 0 0 10px 0;
+            font-size: 2.2em;
+            color: var(--secondary-color);
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .edit-btn {
+            background-color: var(--button-primary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .edit-btn:hover {
+            background-color: var(--button-hover);
+            box-shadow: 0 4px 12px rgba(255,103,0,0.3);
+        }
+
+        .logout-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .downloads-section {
+            margin-top: 40px;
+        }
+
+        .downloads-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+
+        .download-card {
+            background: linear-gradient(145deg, #ffffff, #f8f9fa);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--background-light);
+            transition: transform 0.3s ease;
+        }
+
+        .download-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .edit-form {
+            display: none;
+            margin-top: 30px;
+            padding: 25px;
+            background: #f8faff;
+            border-radius: 12px;
+            border: 1px solid var(--highlight-color);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--background-light);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: var(--highlight-color);
+            outline: none;
+        }
+
+        .error-message {
+            color: red;
+            display: none;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="upload-photo">
+                <img src="placeholder.jpg" alt="Foto de Perfil" class="profile-photo" id="profilePhoto">
+                <input type="file" id="photoInput" accept="image/*">
+            </div>
+            <div class="profile-info">
+                <h2 id="userName">Carregando...</h2>
+                <p id="userEmail"></p>
+                <div class="profile-actions">
+                    <button class="edit-btn" onclick="toggleEditForm()">Editar Perfil</button>
+                    <button class="logout-btn" onclick="logout()">Sair</button>
+                </div>
+            </div>
+        </div>
+
+        <form class="edit-form" id="editForm" onsubmit="saveChanges(event)">
+            <div class="form-group">
+                <label>Nome:</label>
+                <input type="text" id="editName" required>
+            </div>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" id="editEmail" required>
+            </div>
+            <div class="form-group">
+                <label>Nova Senha:</label>
+                <input type="password" id="editPassword">
+            </div>
+            <button type="submit" class="edit-btn">Salvar Alterações</button>
+            <div class="error-message" id="errorMessage"></div>
+        </form>
+
+        <div class="downloads-section">
+            <h3>Downloads Recentes</h3>
+            <div class="downloads-grid" id="downloadsGrid">
+                <!-- Downloads serão inseridos via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Verificar se o usuário está logado
+            const loggedUser = JSON.parse(localStorage.getItem('loggedUser'));
+            if (!loggedUser) {
+                window.location.href = 'cadastrar.html';
+                return;
+            }
+
+            // Carregar dados atualizados
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const currentUser = users.find(u => u.id === loggedUser.id) || loggedUser;
+            
+            loadUserData(currentUser);
+            loadDownloads(currentUser);
+            setupPhotoUpload(currentUser.id);
+        });
+
+        function loadUserData(user) {
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userEmail').textContent = user.email;
+            document.getElementById('editName').value = user.name;
+            document.getElementById('editEmail').value = user.email;
+            
+            if(user.profilePhoto) {
+                document.getElementById('profilePhoto').src = user.profilePhoto;
+            }
+        }
+
+        function setupPhotoUpload(userId) {
+            const photoInput = document.getElementById('photoInput');
+            const profilePhoto = document.getElementById('profilePhoto');
+
+            photoInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if(file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const users = JSON.parse(localStorage.getItem('users')) || [];
+                        const userIndex = users.findIndex(u => u.id === userId);
+                        
+                        if(userIndex > -1) {
+                            users[userIndex].profilePhoto = e.target.result;
+                            localStorage.setItem('users', JSON.stringify(users));
+                            localStorage.setItem('loggedUser', JSON.stringify(users[userIndex]));
+                            profilePhoto.src = e.target.result;
+                        }
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        function toggleEditForm() {
+            const form = document.getElementById('editForm');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function saveChanges(e) {
+            e.preventDefault();
+            
+            const newName = document.getElementById('editName').value;
+            const newEmail = document.getElementById('editEmail').value;
+            const newPassword = document.getElementById('editPassword').value;
+
+            if(!newName || !newEmail) {
+                showError('Preencha todos os campos obrigatórios');
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const loggedUser = JSON.parse(localStorage.getItem('loggedUser'));
+            const userIndex = users.findIndex(u => u.id === loggedUser.id);
+
+            if(userIndex > -1) {
+                // Atualizar dados
+                users[userIndex] = {
+                    ...users[userIndex],
+                    name: newName,
+                    email: newEmail,
+                    password: newPassword || users[userIndex].password
+                };
+
+                // Salvar alterações
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('loggedUser', JSON.stringify(users[userIndex]));
+                
+                loadUserData(users[userIndex]);
+                toggleEditForm();
+                alert('Alterações salvas com sucesso!');
+            }
+        }
+
+        function loadDownloads(user) {
+            const grid = document.getElementById('downloadsGrid');
+            grid.innerHTML = '';
+
+            user.downloads.forEach(download => {
+                const card = document.createElement('div');
+                card.className = 'download-card';
+                card.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 24px;">📥</span>
+                        <div>
+                            <strong>${download.title}</strong>
+                            <p style="margin: 5px 0; color: #666;">${download.date}</p>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function showError(message) {
+            const errorElement = document.getElementById('errorMessage');
+            errorElement.textContent = message;
+            errorElement.style.display = message ? 'block' : 'none';
+        }
+
+        function logout() {
+            localStorage.removeItem('loggedUser');
+            window.location.href = 'cadastrar.html';
+        }
+    </script>
+</body>
+</html>

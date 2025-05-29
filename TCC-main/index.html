@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- METADADOS BÁSICOS -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projeto Avião Arduino | Apresentação</title>
+    
+    <!-- DEPENDÊNCIAS EXTERNAS -->
+    <!-- Tailwind CSS para estilização -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Arquivo CSS local -->
+    <link rel="stylesheet" href="main.css">
+    
+    <!-- ESTILOS INLINE -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        /* Estilos para o slider de imagens */
+        .slider {
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Estilos para cada slide individual */
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        
+        /* Classe para o slide ativo */
+        .slide.active {
+            opacity: 1;
+        }
+        
+        /* Efeitos para os campos do formulário */
+        .contact-form input, .contact-form textarea {
+            transition: all 0.3s ease;
+        }
+        
+        /* Efeitos de focus para os campos */
+        .contact-form input:focus, .contact-form textarea:focus {
+            transform: scale(1.02);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Estilos para a linha do tempo */
+        .timeline-item {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 30px;
+        }
+        
+        /* Marcador circular para cada item da linha do tempo */
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+        }
+        
+        /* Linha conectando os itens da timeline */
+        .timeline-item:after {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 15px;
+            width: 1px;
+            height: calc(100% - 15px);
+            background-color: #e5e7eb;
+        }
+        
+        /* Remove a linha após o último item */
+        .timeline-item:last-child:after {
+            display: none;
+        }
+
+        header {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        nav {
+            top: 60px; /* Valor exato em pixels correspondente à altura do header */
+            box-shadow: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.1); /* Opcional: linha de separação estilizada */
+        }
+
+    </style>
+</head>
+
+<body class="font-sans bg-gray-50">
+
+    <!-- ============================================= -->
+    <!-- HEADER -->
+    <!-- ============================================= -->
+    <header class="bg-white text-white sticky top-0 z-50 h-20 flex items-center">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <!-- Logo do projeto -->
+            <div class="flex items-center h-full py-2"> <!-- Ajuste de altura e padding -->
+                <img src="imgs/Logo.png" alt="Logo Avião Arduino" class="h-20 object-contain">
+    
+            </div>
+            
+            <!-- Botões de autenticação -->
+            <div class="flex space-x-3">
+                <a href="entrar.html" class="px-3 py-1 bg-white text-blue-600 rounded hover:bg-blue-100 transition">Entrar</a>
+                <a href="cadastrar.html" class="px-3 py-1 bg-orange-500 rounded hover:bg-orange-400 transition">Cadastrar</a>
+            </div>
+            
+            <!-- Botão do menu mobile -->
+            <button id="mobile-menu-button" class="md:hidden text-2xl">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+<!-- ============================================= -->
+<!-- NAVIGATION -->
+<!-- ============================================= -->
+<nav class="bg-blue-800 text-white fixo top-16 h-14 z-40">
+    <div class="container mx-auto px-4 justify-center">
+        <!-- Navegação principal (desktop) -->
+        <div class="hidden md:flex justify-center space-x-6 py-2">
+            <a href="#home" class="hover:text-blue-200 transition py-2">Home</a>
+            <a href="#about" class="hover:text-blue-200 transition py-2">Sobre o Projeto</a>
+            <a href="#construction" class="hover:text-blue-200 transition py-2">Montagem</a>
+            <a href="#team" class="hover:text-blue-200 transition py-2">Quem Somos</a>
+            <a href="#contact" class="hover:text-blue-200 transition py-2">Contato</a>
+        </div>
+        
+        <!-- Menu mobile (oculto por padrão) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-blue-700 px-4 py-2">
+            <div class="flex flex-col space-y-3">
+                <a href="#home" class="hover:text-blue-200 transition">Home</a>
+                <a href="#about" class="hover:text-blue-200 transition">Sobre o Projeto</a>
+                <a href="#construction" class="hover:text-blue-200 transition">Montagem</a>
+                <a href="#team" class="hover:text-blue-200 transition">Quem Somos</a>
+                <a href="#contact" class="hover:text-blue-200 transition">Contato</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+    <!-- ============================================= -->
+    <!-- HERO SLIDER (RESTAURADO) -->
+    <!-- ============================================= -->
+    <section id="home" class="slider bg-gray-800 text-white relative">
+        <!-- Slide 1 - Apresentação do projeto -->
+        <div class="slide active flex items-center justify-center" style="background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://cdn.pixabay.com/photo/2021/09/13/19/03/plane-6622211_1280.jpg') no-repeat center center/cover;">
+            <div class="text-center px-4 max-w-4xl">
+                <h2 class="text-4xl font-bold mb-4">Onde os sonhos de voo ganham forma</h2>
+                <p class="text-xl mb-6">Uma inovadora solução de aeromodelismo controlado por Arduino, combinando eletrônica, programação e acessibilidade</p>
+                <a href="#about" class="px-6 py-2 bg-orange-600 rounded-full hover:bg-blue-500 transition inline-block">Saiba Mais</a>
+            </div>
+        </div>
+        
+        <!-- Slide 2 - Tecnologia -->
+        <div class="slide flex items-center justify-center" style="background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://cdn.pixabay.com/photo/2012/11/28/09/38/aircraft-67566_1280.jpg') no-repeat center center/cover;">
+            <div class="text-center px-4 max-w-4xl">
+                <h2 class="text-4xl font-bold mb-4">Crie seu próprio aeromodelo conosco</h2>
+                <p class="text-xl mb-6">Utilizando sensores avançados, motores precisos e algoritmos inteligentes para criar um aeromodelo estável e responsivo.</p>
+                <a href="#construction" class="px-6 py-2 bg-orange-600 rounded-full hover:bg-blue-500 transition inline-block">Ver Montagem</a>
+            </div>
+        </div>
+        
+        <!-- Slide 3 - Aprendizado -->
+        <div class="slide flex items-center justify-center" style="background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://cdn.pixabay.com/photo/2018/12/22/10/56/p-51-3889474_1280.jpg') no-repeat center center/cover;">
+            <div class="text-center px-4 max-w-4xl">
+                <h2 class="text-4xl font-bold mb-4">Aprenda programação no processo</h2>
+                <p class="text-xl mb-6">Um projeto educacional que une teoria e prática, desenvolvendo habilidades em áreas da programação e tecnologia.</p>
+                <a href="#team" class="px-6 py-2 bg-orange-600 rounded-full hover:bg-blue-500 transition inline-block">Conheça a Equipe</a>
+            </div>
+        </div>
+        
+        <!-- Indicadores de slide (dots) -->
+        <div class="absolute bottom-4 left-0 right-0 flex justify-center space-x-2">
+            <button class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 focus:outline-none active"></button>
+            <button class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 focus:outline-none"></button>
+            <button class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 focus:outline-none"></button>
+        </div>
+        
+        <!-- Botões de navegação do slider -->
+        <button id="prev-slide" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70 transition">
+            <i class="fas fa-chevron-left text-xl"></i>
+        </button>
+        <button id="next-slide" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70 transition">
+            <i class="fas fa-chevron-right text-xl"></i>
+        </button>
+    </section>
+
+    <!-- ============================================= -->
+    <!-- SOBRE O PROJETO -->
+    <!-- ============================================= -->
+    <section id="about" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Sobre o Projeto</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <!-- Texto sobre o projeto -->
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4 text-blue-600">Como Tudo Começou</h3>
+                    <p class="text-gray-700 mb-4">Nosso projeto nasceu da paixão por aeromodelismo e da curiosidade em entender como a tecnologia poderia melhorar o desempenho de um avião de pequeno porte. Observando as limitações dos modelos convencionais, decidimos criar uma solução mais inteligente e acessível.</p>
+                    <p class="text-gray-700 mb-6">Utilizando a plataforma Arduino, desenvolvemos um sistema de controle que permite maior precisão nos movimentos, estabilidade automática e a possibilidade de coleta de dados em tempo real durante os voos.</p>
+                    
+                    <!-- Box de objetivos -->
+                    <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-600">
+                        <h4 class="font-bold text-blue-800 mb-2">Objetivos Principais</h4>
+                        <ul class="list-disc pl-5 text-gray-700 space-y-1">
+                            <li>Criar um aeromodelo controlado por Arduino</li>
+                            <li>Fazer um projeto acessível aos custos</li>
+                            <li>Desenvolver telemetria para coleta de dados de voo</li>
+                            <li>Construção de um site para a documentação</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Imagem e estatísticas -->
+                <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+                    <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Arduino e componentes eletrônicos" class="rounded-lg shadow-sm w-full h-auto">
+                    <div class="mt-4 flex justify-center space-x-4">
+                        <div class="text-center">
+                            <div class="text-blue-600 text-2xl font-bold">6</div>
+                            <div class="text-gray-600 text-sm">Meses de Desenvolvimento</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-blue-600 text-2xl font-bold">15+</div>
+                            <div class="text-gray-600 text-sm">Componentes Eletrônicos</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-blue-600 text-2xl font-bold">indefinido</div>
+                            <div class="text-gray-600 text-sm">Linhas de Código</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================= -->
+    <!-- PROCESSO DE MONTAGEM -->
+    <!-- ============================================= -->
+    <section id="construction" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Processo de Montagem</h2>
+            
+            <div class="max-w-3xl mx-auto">
+                <!-- Item 1: Planejamento -->
+                <div class="timeline-item">
+                    <h3 class="text-xl font-semibold mb-2">1. Planejamento e Design</h3>
+                    <p class="text-gray-700">Começamos com extensa pesquisa sobre aerodinâmica e dimensionamento de aeromodelos. Utilizamos software CAD para projetar a estrutura e simular o comportamento aerodinâmico.</p>
+                    <br>
+                    <iframe width="560" height="315" class="rounded-lg" src="https://www.youtube.com/embed/Pmn7-2x1fms?si=v2Tv1Zxnx9CdKrPl" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    <br>
+                    <div class="mt-3 flex space-x-2">
+                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">SketchUp</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">AutoCAD</span>
+                    </div>
+                </div>
+
+                
+                <!-- Item 2: Componentes -->
+                <div class="timeline-item">
+                    <h3 class="text-xl font-semibold mb-2">2. Seleção de Componentes</h3>
+                    <p class="text-gray-700">Escolhemos cuidadosamente cada componente: Arduino como controlador principal, Modulo NRF24L01+ de alta eficiência, Regulador de tensão 3.3 V, Capacitor 1000uf e 100uf, Indutor com nucleo de ferrite, entre outros componentes.</p>
+                    <div class="mt-3 flex flex-wrap gap-2">
+                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Arduino ProMini</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">NRF24L01+</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Regulador</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Capacitores</span>
+                    </div>
+                </div>
+                
+                <!-- Item 3: Estrutura -->
+                <div class="timeline-item">
+                    <h3 class="text-xl font-semibold mb-2">3. Construção da Estrutura</h3>
+                    <p class="text-gray-700">Utilizamos bandejas de deprom construir a estrutura leve porém resistente. Além de utilizar palitos de picolé, canudos e clips metálicos.</p>
+                    <div class="mt-3">
+                        <img src="https://images.unsplash.com/photo-1581093196270-c9a90f8a55e5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Construção da estrutura" class="rounded-lg w-full max-w-md">
+                    </div>
+                </div>
+                
+                <!-- Item 4: Eletrônica -->
+                <div class="timeline-item">
+                    <h3 class="text-xl font-semibold mb-2">4. Montagem da Eletrônica</h3>
+                    <p class="text-gray-700">Integramos todos os componentes eletrônicos, juntamos a estrutura do avião com os componentes escolhidos, fazendo a montagem de delicada e garantindo que cada componente funcionaria corretamente.</p>
+                    <div class="mt-3">
+                        <img src="https://blog.raisa.com.br/wp-content/uploads/2023/03/arduinobanner.jpg" alt="Montagem eletrônica" class="rounded-lg w-full max-w-md">
+                    </div>
+                </div>
+                
+                <!-- Item 5: Programação -->
+                <div class="timeline-item">
+                    <h3 class="text-xl font-semibold mb-2">5. Programação e Testes</h3>
+                    <p class="text-gray-700">Utilizamos o software IDE (Integrated Development Environment) do próprio Arduino para fazermos a programação e a conexão entre o avião e o controle.</p>
+                    <div class="mt-3">
+                        <pre class="bg-gray-800 text-gray-100 p-3 rounded-lg text-sm overflow-x-auto">
+// Exemplo de código ficticio para demonstração 
+void computePID() {
+    error = setPoint - input;
+    integral += error * dt;
+    derivative = (error - prevError) / dt;
+    output = Kp*error + Ki*integral + Kd*derivative;
+    prevError = error;
+}</pre>
+                    </div>
+                </div>
+                
+                <!-- Item 6: Testes -->
+                <div class="timeline-item">
+                    <h3 class="text-xl font-semibold mb-2">6. Voos de Teste</h3>
+                    <p class="text-gray-700">Realizamos diversos voos de teste, ajustando parâmetros e refinando o sistema. Coletamos dados de telemetria para análise pós-voo e melhoria contínua do projeto.</p>
+                    <div class="mt-3">
+                        <div class="bg-blue-50 p-3 rounded-lg">
+                            <h4 class="font-semibold text-blue-800">Dados Coletados</h4>
+                            <ul class="list-disc pl-5 text-gray-700 mt-1">
+                                <li>Velocidade do ar</li>
+                                <li>Temperatura Ambiente</li>
+                                <li>Altura e distancia que suporta</li>
+                                <li>Consumo de bateria</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================= -->
+    <!-- EQUIPE -->
+    <!-- ============================================= -->
+    <section id="team" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Nossa Equipe</h2>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Membro 1 -->
+                <div class="bg-gray-50 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
+                    <img src="https://wallpapers.com/images/hd/best-profile-pictures-wqm0z83avja0y31c.jpg" alt="Membro da equipe" class="w-auto h-auto object-cover">
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold">Maria Fernanda</h3>
+                        <p class="text-blue-600 mb-2">Líder do Projeto / Eletrônica</p>
+                        <p class="text-gray-700">Responsável pelo desenvolvimento do hardware e integração dos sistemas eletrônicos. </p>
+                        <div class="mt-3 flex space-x-2">
+                            <a href="#" class="text-blue-500 hover:text-blue-700"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="text-blue-500 hover:text-blue-700"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Membro 2 -->
+                <div class="bg-gray-50 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
+                    <img src="https://wallpapers.com/images/hd/best-profile-pictures-wqm0z83avja0y31c.jpg" alt="Membro da equipe" class="w-full h-auto object-cover">
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold">Luan Siqueira</h3>
+                        <p class="text-blue-600 mb-2">Estrutura / Montagem</p>
+                        <p class="text-gray-700">Desenvolveu a estrutura e estabilização do aeromodelo. Além de concluir a montagem</p>
+                        <div class="mt-3 flex space-x-2">
+                            <a href="#" class="text-blue-500 hover:text-blue-700"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="text-blue-500 hover:text-blue-700"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Membro 3 -->
+                <div class="bg-gray-50 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
+                    <img src="https://wallpapers.com/images/hd/best-profile-pictures-wqm0z83avja0y31c.jpg" alt="Membro da equipe" class="w-full h-auto object-cover">
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold">Mateus Machado</h3>
+                        <p class="text-blue-600 mb-2">Web Design / Site</p>
+                        <p class="text-gray-700">Responsável pela criação do Site e pela documentação da montagem do aeromodelo.</p>
+                        <div class="mt-3 flex space-x-2">
+                            <a href="#" class="text-blue-500 hover:text-blue-700"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="text-blue-500 hover:text-blue-700"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sobre a equipe -->
+            <div class="mt-12 bg-blue-50 rounded-lg p-6">
+                <h3 class="text-xl font-bold text-center mb-4">Nossa Jornada</h3>
+                <p class="text-gray-700 text-center max-w-3xl mx-auto">Somos um grupo de estudantes apaixonados por tecnologia e aviação. Nosso projeto nasceu como um trabalho acadêmico para nosso TCC. Combinamos nossas habilidades complementares para criar algo único que pudesse inspirar outros estudantes e entusiastas.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================= -->
+    <!-- CONTATO -->
+    <!-- ============================================= -->
+    <section id="contact" class="py-16 bg-gray-800 text-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Entre em Contato</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Formulário de contato -->
+                <div class="contact-form">
+                    <form class="space-y-4">
+                        <!-- Campo Nome -->
+                        <div>
+                            <label for="name" class="block mb-1">Nome</label>
+                            <input type="text" id="name" class="w-full px-4 py-2 rounded bg-gray-700 border border-gray-600 focus:border-blue-500 focus:outline-none">
+                        </div>
+                        
+                        <!-- Campo Email -->
+                        <div>
+                            <label for="email" class="block mb-1">Email</label>
+                            <input type="email" id="email" class="w-full px-4 py-2 rounded bg-gray-700 border border-gray-600 focus:border-blue-500 focus:outline-none">
+                        </div>
+                        
+                        <!-- Campo Assunto -->
+                        <div>
+                            <label for="subject" class="block mb-1">Assunto</label>
+                            <select id="subject" class="w-full px-4 py-2 rounded bg-gray-700 border border-gray-600 focus:border-blue-500 focus:outline-none">
+                                <option value="">Selecione um assunto</option>
+                                <option value="project">Sobre o Projeto</option>
+                                <option value="partnership">Parcerias</option>
+                                <option value="presentation">Agendar Apresentação</option>
+                                <option value="other">Outro</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Campo Mensagem -->
+                        <div>
+                            <label for="message" class="block mb-1">Mensagem</label>
+                            <textarea id="message" rows="5" class="w-full px-4 py-2 rounded bg-gray-700 border border-gray-600 focus:border-blue-500 focus:outline-none"></textarea>
+                        </div>
+                        
+                        <!-- Botão Enviar -->
+                        <button type="submit" class="px-6 py-2 bg-blue-600 rounded hover:bg-blue-500 transition w-full">Enviar Mensagem</button>
+                    </form>
+                </div>
+                
+                <!-- Informações de contato -->
+                <div>
+                    <div class="bg-gray-700 p-6 rounded-lg h-full">
+                        <h3 class="text-xl font-bold mb-4">Informações de Contato</h3>
+                        
+                        <div class="space-y-4">
+                            <!-- Endereço -->
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-map-marker-alt mt-1 text-blue-400"></i>
+                                <div>
+                                    <h4 class="font-semibold">Endereço</h4>
+                                    <p class="text-gray-300">Etec Darcy Pereira de Moraes, R. Moisés de Nalesso, 2888 - Itapetininga - SP</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Email -->
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-envelope mt-1 text-blue-400"></i>
+                                <div>
+                                    <h4 class="font-semibold">Email</h4>
+                                    <p class="text-gray-300">flyeasy@gmail.com</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Telefone -->
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-phone-alt mt-1 text-blue-400"></i>
+                                <div>
+                                    <h4 class="font-semibold">Telefone</h4>
+                                    <p class="text-gray-300">(15) 70707-0707</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Redes sociais -->
+                        <div class="mt-6">
+                            <h4 class="font-semibold mb-2">Redes Sociais</h4>
+                            <div class="flex space-x-4">
+                                <a href="#" class="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center hover:bg-blue-600 transition">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="#" class="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center hover:bg-blue-400 transition">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="https://www.instagram.com/fly.easy41/" class="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center hover:bg-pink-600 transition">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                                <a href="#" class="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center hover:bg-gray-800 transition">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                                <a href="#" class="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center hover:bg-red-600 transition">
+                                    <i class="fab fa-youtube"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================= -->
+    <!-- FOOTER -->
+    <!-- ============================================= -->
+    <footer class="bg-gray-900 text-gray-400 py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <!-- Sobre o projeto -->
+                <div>
+                    <h3 class="text-white text-lg font-bold mb-4">Avião Arduino</h3>
+                    <p>Um projeto inovador que combina aeromodelismo, eletrônica e programação para criar uma plataforma educacional avançada.</p>
+                </div>
+                
+                <!-- Links rápidos -->
+                <div>
+                    <h3 class="text-white text-lg font-bold mb-4">Links Rápidos</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="hover:text-white transition">Home</a></li>
+                        <li><a href="#about" class="hover:text-white transition">Sobre o Projeto</a></li>
+                        <li><a href="#construction" class="hover:text-white transition">Processo de Montagem</a></li>
+                        <li><a href="#team" class="hover:text-white transition">Nossa Equipe</a></li>
+                        <li><a href="#contact" class="hover:text-white transition">Contato</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Documentação -->
+                <div>
+                    <h3 class="text-white text-lg font-bold mb-4">Documentação</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition">Manual do Projeto</a></li>
+                        <li><a href="#" class="hover:text-white transition">Esquemáticos</a></li>
+                        <li><a href="#" class="hover:text-white transition">Código Fonte</a></li>
+                        <li><a href="#" class="hover:text-white transition">Relatório Técnico</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Newsletter -->
+                <div>
+                    <h3 class="text-white text-lg font-bold mb-4">Newsletter</h3>
+                    <p class="mb-3">Assine para receber atualizações sobre nosso projeto.</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Seu email" class="px-3 py-2 bg-gray-800 text-white rounded-l focus:outline-none w-full">
+                        <button class="bg-blue-600 text-white px-4 py-2 rounded-r hover:bg-blue-500 transition">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Copyright -->
+            <div class="border-t border-gray-800 mt-8 pt-6 text-center">
+                <p>&copy; 2025 Projeto Carcará Tonitrua. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================= -->
+    <!-- JAVASCRIPT -->
+    <!-- ============================================= -->
+     
+    <script>
+        /**
+         * TOGGLE DO MENU MOBILE
+         * Alterna a visibilidade do menu em dispositivos móveis
+         */
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        /**
+         * CONTROLE DO SLIDER
+         * Configura a navegação entre slides e transições automáticas
+         */
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.slider-dot');
+        const totalSlides = slides.length;
+
+        /**
+         * Mostra um slide específico
+         * @param {number} index - Índice do slide a ser mostrado
+         */
+        function showSlide(index) {
+            // Esconde todos os slides
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            // Mostra o slide atual
+            slides[index].classList.add('active');
+            dots[index].classList.add('active');
+            currentSlide = index;
+        }
+
+        // Evento para o botão "próximo slide"
+        document.getElementById('next-slide').addEventListener('click', function() {
+            let nextSlide = (currentSlide + 1) % totalSlides;
+            showSlide(nextSlide);
+        });
+
+        // Evento para o botão "slide anterior"
+        document.getElementById('prev-slide').addEventListener('click', function() {
+            let prevSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            showSlide(prevSlide);
+        });
+
+        /**
+         * NAVEGAÇÃO POR DOTS
+         * Permite a navegação clicando nos indicadores de slide (dots)
+         * Cada dot recebe um event listener que mostra o slide correspondente
+         */
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', function() {
+                showSlide(index);
+            });
+        });
+
+        /**
+         * TROCA AUTOMÁTICA DE SLIDES
+         * Configura um intervalo para mudar os slides automaticamente
+         * @param {number} 5000 - Intervalo em milissegundos (5 segundos)
+         */
+        setInterval(() => {
+            let nextSlide = (currentSlide + 1) % totalSlides;
+            showSlide(nextSlide);
+        }, 5000);
+
+        /**
+         * SCROLL SUAVE PARA LINKS ÂNCORA
+         * Implementa navegação suave para seções da página
+         * Ajusta a posição considerando a altura do header fixo
+         */
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                // Previne o comportamento padrão do link
+                e.preventDefault();
+                
+                // Obtém o alvo do link
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    // Rola suavemente até a seção alvo
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 70, // Ajusta para o header fixo
+                        behavior: 'smooth' // Animação suave
+                    });
+                    
+                    // Fecha o menu mobile se estiver aberto
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

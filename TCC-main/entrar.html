@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Entrar</title>
+    <link rel="stylesheet" href="entrar.css">
+</head>
+<body>
+    <div class="welcome-container">
+        <h1>Bem-vindo!</h1>
+        <p>Não tem uma conta?</p>
+        <a href="cadastrar.html" class="btn">Cadastre-se</a>
+    </div>
+    <div class="container">
+        <h2>Login</h2>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="senha" placeholder="Senha" required>
+        <button onclick="login()">Entrar</button>
+        <p>ou use seu email</p>
+    </div>
+    <script>
+        // Verificar usuário já logado
+        window.onload = function() {
+            var loggedUser = localStorage.getItem('loggedUser');
+            if (loggedUser) {
+                window.location.href = "perfil.html";
+            }
+        };
+
+        // Verifica credenciais e realiza login
+        function login() {
+            var email = document.getElementById("email").value;
+            var senha = document.getElementById("senha").value;
+            var users = JSON.parse(localStorage.getItem("users") || "[]");
+            var user = users.find(function(u) {
+                return u.email === email && u.senha === senha;
+            });
+            if (user) {
+                localStorage.setItem("loggedUser", JSON.stringify(user));
+                window.location.href = "perfil.html";
+            } else {
+                alert("Usuário ou senha inválidos!");
+            }
+        }
+    </script>
+</body>
+</html>
